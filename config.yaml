@@ -1,0 +1,25 @@
+# gorutine max num
+TaskLoad: 15
+NumCpu: 2
+
+# MaxMultipartMemory
+MaxMultipartMemory: 20
+
+# db
+DBAddress: 192.168.5.251:3306
+DBDatabase: auto
+DBUserPasswd: root:123456
+
+# log
+LogLevel: DEBUG
+LogRotateMode: time
+LogRotateWhen: H
+LogFilePrefix: log/data_server
+LogFileNumBackup: 48
+LogConcurrentNum: 10
+LogRotationInterval: 3600
+#log文件最大存续时间，单位：second
+LogMaxAge: 7 * 24 * 3600
+
+# server
+ServerAddress: 0.0.0.0:8089

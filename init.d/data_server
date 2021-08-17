@@ -1,0 +1,60 @@
+#!/bin/sh
+
+. /etc/rc.d/init.d/functions
+
+# dataServerDir=${IOSPUSHWORKERDIR-/home/smile/code/France/ymir/server/data_server}
+dataServerDir=${IOSPUSHWORKERDIR-/home/smile/code/workbench/data_server}
+prog=data_server
+startfile=${STARTFILE-data_server.sh}
+RETVAL=0
+
+start() {
+    echo -n $"Starting $startfile: "
+
+    cd $dataServerDir && ./$startfile &
+    RETVAL=$?
+    [ "$RETVAL" -eq 0 ] && success $"$prog startup" || failure $"$prog startup"
+    echo
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    ps aux | grep $prog | grep -v grep | awk '{print $2}' | xargs kill -9
+    RETVAL=$?
+    [ "$RETVAL" -eq 0 ] && success $"$prog shutdown" || failure $"$prog shutdown"
+    echo
+    return $RETVAL
+}
+
+status() {
+    echo -n $"Running $prog: "
+    ps aux | grep $prog | grep -v grep >/dev/null
+    RETVAL=$?
+    [ "$RETVAL" -eq 0 ] && success $"$prog is running" || failure $"$prog is erroring"
+    echo
+    return $RETVAL
+}
+
+# See how we were called.
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo $"Usage: $prog {start|stop|restart|status|help}"
+        RETVAL=2
+esac
+
+exit $RETVAL
+
